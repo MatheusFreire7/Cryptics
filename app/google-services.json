@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "401106173902",
+    "project_id": "appcryptics",
+    "storage_bucket": "appcryptics.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:401106173902:android:f520c9b6145d897ae6359f",
+        "android_client_info": {
+          "package_name": "br.unicamp.appcryptics"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "401106173902-1ptgnsmh2j847bls2mh72ntp3vav9khg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAwUbUfFs9-BsuJEmXjXeUpfIiVLK3jnM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "401106173902-1ptgnsmh2j847bls2mh72ntp3vav9khg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
