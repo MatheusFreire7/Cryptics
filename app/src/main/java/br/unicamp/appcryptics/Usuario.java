@@ -1,6 +1,7 @@
 package br.unicamp.appcryptics;
 
-public class Usuario {
+public class Usuario
+{
     String fotoPerfil, username, email, senha, userId, ultimaMensagem,status;
 
     public Usuario()
