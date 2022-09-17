@@ -27,9 +27,9 @@ import br.unicamp.appcryptics.databinding.ActivityEntra3Binding;
 
 public class EntraActivity3 extends AppCompatActivity {
 
-    ActivityEntra3Binding binding;
-    FirebaseDatabase firebaseDatabase;
-    private FirebaseAuth mAuth;
+    ActivityEntra3Binding binding;       // biblioteca que permite vincular componentes do layout
+    FirebaseDatabase firebaseDatabase;   // Banco de dados do Firebase
+    private FirebaseAuth mAuth;          // Autenticação do Firebase
 
     GoogleSignInClient mGoogleSignInClient;
 
@@ -46,15 +46,15 @@ public class EntraActivity3 extends AppCompatActivity {
         getSupportActionBar().hide();
 
 
-        BeginSignInRequest signInRequest = BeginSignInRequest.builder()
-                .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                        .setSupported(true)
-                        // Your server's client ID, not your Android client ID.
-                        .setServerClientId(getString(R.string.default_web_client_id))
-                        // Only show accounts previously used to sign in.
-                        .setFilterByAuthorizedAccounts(true)
-                        .build())
-                .build();
+//        BeginSignInRequest signInRequest = BeginSignInRequest.builder()
+//                .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+//                        .setSupported(true)
+//                        // Your server's client ID, not your Android client ID.
+//                        .setServerClientId(getString(R.string.default_web_client_id))
+//                        // Only show accounts previously used to sign in.
+//                        .setFilterByAuthorizedAccounts(true)
+//                        .build())
+//                ma.build();
 
         binding.btnEntrar.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -21,9 +21,9 @@ import br.unicamp.appcryptics.databinding.ActivityEntra3Binding;
 public class CadastroActivity2 extends AppCompatActivity{
 
 
-    ActivityCadastro2Binding binding;
-    private FirebaseAuth mAuth;
-    FirebaseDatabase firebaseDatabase;
+    ActivityCadastro2Binding binding;  // biblioteca que permite vincular componentes do layout
+    private FirebaseAuth mAuth;        // Autenticação do Firebase
+    FirebaseDatabase firebaseDatabase; // Banco de dados do Firebase
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,22 +46,22 @@ public class CadastroActivity2 extends AppCompatActivity{
                     mAuth.createUserWithEmailAndPassword(binding.txtEmail.getText().toString(), binding.txtSenha.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful())
+                            if(task.isSuccessful()) // se conseguiu cadastrar
                             {
                                 Usuario user = new Usuario(binding.txtUsername.getText().toString(), binding.txtSenha.getText().toString(),binding.txtEmail.getText().toString());
                                 String id = task.getResult().getUser().getUid();
-                                Toast.makeText(CadastroActivity2.this, "Cadastrado com Sucesso", Toast.LENGTH_LONG).show();
+                                Toast.makeText(CadastroActivity2.this, "Cadastrado com Sucesso!", Toast.LENGTH_LONG).show();
                             }
-                            else
+                            else // senão conseguiu cadastrar
                             {
                                 Toast.makeText(CadastroActivity2.this, "E-mail já cadastrado", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
                 }
-                else
+                else // se o usuario não preencheu todas as informações irá retornar esta mesnsagem
                 {
-                    Toast.makeText(CadastroActivity2.this, "Digite todos os Campos", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CadastroActivity2.this, "Preencha todos os Campos para se Cadastrar", Toast.LENGTH_LONG).show();
                 }
             }
         });

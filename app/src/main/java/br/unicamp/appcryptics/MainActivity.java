@@ -12,12 +12,13 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import br.unicamp.appcryptics.Adapter.FragmentAdapter;
 import br.unicamp.appcryptics.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    ActivityMainBinding binding;
-    FirebaseAuth mAuth;
+    ActivityMainBinding binding; // biblioteca que permite vincular componentes do layout
+    FirebaseAuth mAuth;          // Autenticação do Firebase
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
+
+        binding.viewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager()));
+        binding.tabLayout.setupWithViewPager(binding.viewPager);
     }
 
     @Override
