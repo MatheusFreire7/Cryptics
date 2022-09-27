@@ -47,14 +47,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Configurações Clicada", Toast.LENGTH_LONG).show();
                 break;
 
-            case R.id.groupChat:
-                Toast.makeText(this, "Chat de Grupo clicado", Toast.LENGTH_LONG).show();
-                break;
-
             case  R.id.logout:
-               mAuth.signOut();
                Intent intent = new Intent(MainActivity.this,EntraActivity3.class);
                startActivity(intent);
+               mAuth.signOut();
                break;
         }
         return super.onOptionsItemSelected(item);

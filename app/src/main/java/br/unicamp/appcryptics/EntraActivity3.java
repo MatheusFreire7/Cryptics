@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.mbms.DownloadProgressListener;
@@ -43,18 +44,10 @@ public class EntraActivity3 extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
 
+
+
         getSupportActionBar().hide();
 
-
-//        BeginSignInRequest signInRequest = BeginSignInRequest.builder()
-//                .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-//                        .setSupported(true)
-//                        // Your server's client ID, not your Android client ID.
-//                        .setServerClientId(getString(R.string.default_web_client_id))
-//                        // Only show accounts previously used to sign in.
-//                        .setFilterByAuthorizedAccounts(true)
-//                        .build())
-//                ma.build();
 
         binding.btnEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,32 +92,4 @@ public class EntraActivity3 extends AppCompatActivity {
 
     }
 
-//    public class YourActivity extends AppCompatActivity {
-//
-//        // ...
-//        private static final int REQ_ONE_TAP = 2;  // Can be any integer unique to the Activity.
-//        private boolean showOneTapUI = true;
-//        // ...
-//
-//        @Override
-//        protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//            super.onActivityResult(requestCode, resultCode, data);
-//
-//            switch (requestCode) {
-//                case REQ_ONE_TAP:
-//                    try {
-//                        SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(data);
-//                        String idToken = credential.getGoogleIdToken();
-//                        if (idToken !=  null) {
-//                            // Got an ID token from Google. Use it to authenticate
-//                            // with Firebase.
-//                            Log.d("TAG", "Got ID token.");
-//                        }
-//                    } catch (ApiException e) {
-//                        // ...
-//                    }
-//                    break;
-//            }
-//        }
-//    }
 }

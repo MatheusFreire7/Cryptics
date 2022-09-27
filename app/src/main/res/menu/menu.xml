@@ -3,9 +3,6 @@
     <item android:id="@+id/settings"
         android:title="Configurações"/>
 
-    <item android:id="@+id/groupChat"
-        android:title="Chat de Grupo"/>
-
     <item android:id="@+id/logout"
         android:title="Deslogar"/>
 </menu>
