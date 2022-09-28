@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/User/Documents/GitHub/Cryptics/app/src/main/res/drawable/bg_et_message.xml" value="0.345" />
         <entry key="..\:/Users/User/Documents/GitHub/Cryptics/app/src/main/res/layout/activity_cadastro2.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/Documents/GitHub/Cryptics/app/src/main/res/layout/activity_chat.xml" value="0.33" />
         <entry key="..\:/Users/User/Documents/GitHub/Cryptics/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/User/Documents/GitHub/Cryptics/app/src/main/res/layout/fragment_chats.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/User/Documents/GitHub/Cryptics/app/src/main/res/layout/sample_show_user.xml" value="0.25" />
