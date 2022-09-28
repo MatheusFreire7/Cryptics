@@ -41,6 +41,7 @@ public class CadastroActivity2 extends AppCompatActivity{
     FirebaseDatabase firebaseDatabase; // Banco de dados do Firebase
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
+    //private  DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
 
     @Override
@@ -88,10 +89,13 @@ public class CadastroActivity2 extends AppCompatActivity{
                             if(task.isSuccessful()) // se conseguiu cadastrar
                             {
                                 String id = mAuth.getUid();
-                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-                                reference.child("Users");
+                                //DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+                                DatabaseReference usuarios = FirebaseDatabase.getInstance().getReference();
+                                usuarios = usuarios.child("Users");
                                 user.setUserId(id);
-                                reference.push().setValue(user);
+                                usuarios.child(id).setValue(user);
+//
+//                                reference.push();
                                 Toast.makeText(CadastroActivity2.this, "Cadastrado com Sucesso!", Toast.LENGTH_LONG).show();
                             }
                             else // senão conseguiu cadastrar
