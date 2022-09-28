@@ -1,6 +1,7 @@
 package br.unicamp.appcryptics.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import br.unicamp.appcryptics.ChatActivity;
 import br.unicamp.appcryptics.R;
 import br.unicamp.appcryptics.Usuario;
 
@@ -42,6 +44,18 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.viewHolder>
         Usuario users = listUsuario.get(position);
         Picasso.get().load(users.getFotoPerfil()).placeholder(R.drawable.avatar3).into(holder.image);
         holder.username.setText(users.getUsername());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ChatActivity.class);
+                intent.putExtra("userId", users.getUserId());
+                intent.putExtra("fotoPerfil", users.getFotoPerfil());
+                intent.putExtra("Username", users.getUsername());
+
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

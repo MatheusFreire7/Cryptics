@@ -6,10 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.telephony.mbms.DownloadProgressListener;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,8 +34,7 @@ public class EntraActivity3 extends AppCompatActivity {
     ActivityEntra3Binding binding;       // biblioteca que permite vincular componentes do layout
     FirebaseDatabase firebaseDatabase;   // Banco de dados do Firebase
     private FirebaseAuth mAuth;          // Autenticação do Firebase
-
-    GoogleSignInClient mGoogleSignInClient;
+    LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +46,7 @@ public class EntraActivity3 extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-
-
         getSupportActionBar().hide();
-
 
         binding.btnEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,9 +86,11 @@ public class EntraActivity3 extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(EntraActivity3.this, CadastroActivity2.class);
                 startActivity(intent);
+                finish();
             }
         });
 
     }
+
 
 }

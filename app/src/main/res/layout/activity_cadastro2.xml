@@ -121,19 +121,10 @@
             android:text='Facebook'
             android:textAllCaps="false"
             android:textColor='@color/black'
-            app:backgroundTint='@color/white'
+            app:backgroundTint='@color/fb_color'
             app:cornerRadius="8dp"/>
 
     </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id='@+id/txtCadastroCelular'
-            android:layout_marginTop="15dp"
-            android:text='Cadastre-se com o Celular'
-            android:textColor='@color/fb_color'
-            android:textSize="19sp"/>
 
     </LinearLayout>
 

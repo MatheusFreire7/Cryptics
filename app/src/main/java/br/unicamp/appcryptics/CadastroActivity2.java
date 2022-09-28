@@ -5,9 +5,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -24,6 +26,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.core.Tag;
 
@@ -38,6 +41,7 @@ public class CadastroActivity2 extends AppCompatActivity{
     FirebaseDatabase firebaseDatabase; // Banco de dados do Firebase
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,8 @@ public class CadastroActivity2 extends AppCompatActivity{
         binding =  ActivityCadastro2Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
+
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -72,14 +78,20 @@ public class CadastroActivity2 extends AppCompatActivity{
             public void onClick(View view) {
                 if(!binding.txtEmail.getText().toString().isEmpty() && !binding.txtUsername.getText().toString().isEmpty() && !binding.txtSenha.getText().toString().isEmpty())
                 {
+                    Usuario user = new Usuario();
+                    user.setUsername(binding.txtUsername.getText().toString());
+                    user.setEmail(binding.txtEmail.getText().toString());
+                    user.setSenha(binding.txtSenha.getText().toString());
                     mAuth.createUserWithEmailAndPassword(binding.txtEmail.getText().toString(), binding.txtSenha.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()) // se conseguiu cadastrar
                             {
-//                              Usuario user = new Usuario(binding.txtUsername.getText().toString(), binding.txtSenha.getText().toString(),binding.txtEmail.getText().toString());
-//                              String id = task.getResult().getUser().getUid();
-                                FirebaseUser user = mAuth.getCurrentUser();
+                                String id = mAuth.getUid();
+                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+                                reference.child("Users");
+                                user.setUserId(id);
+                                reference.push().setValue(user);
                                 Toast.makeText(CadastroActivity2.this, "Cadastrado com Sucesso!", Toast.LENGTH_LONG).show();
                             }
                             else // senão conseguiu cadastrar
@@ -101,6 +113,7 @@ public class CadastroActivity2 extends AppCompatActivity{
             public void onClick(View view) {
                 Intent intent = new Intent(CadastroActivity2.this, EntraActivity3.class);
                 startActivity(intent);
+                finish();
             }
         });
 

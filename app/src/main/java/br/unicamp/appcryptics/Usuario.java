@@ -1,5 +1,8 @@
 package br.unicamp.appcryptics;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class Usuario
 {
     String fotoPerfil, username, email, senha, userId, ultimaMensagem,status;
@@ -20,6 +23,13 @@ public class Usuario
     }
 
     public Usuario(String username, String senha, String email) {
+        this.username = username;
+        this.email = email;
+        this.senha = senha;
+    }
+
+    public Usuario(String userId,String username, String senha, String email) {
+        this.userId = userId;
         this.username = username;
         this.email = email;
         this.senha = senha;
@@ -79,5 +89,10 @@ public class Usuario
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void Salvar() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        reference.child("Usuarios").child(getUserId()).setValue(this);
     }
 }

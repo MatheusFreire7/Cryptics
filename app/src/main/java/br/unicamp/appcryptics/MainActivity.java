@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,9 +49,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case  R.id.logout:
+                mAuth.signOut();
                Intent intent = new Intent(MainActivity.this,EntraActivity3.class);
                startActivity(intent);
-               mAuth.signOut();
+               finish();
                break;
         }
         return super.onOptionsItemSelected(item);
