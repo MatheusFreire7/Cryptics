@@ -48,6 +48,8 @@ public class CadastroActivity2 extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro2);
+        binding =  ActivityCadastro2Binding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
 //        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
 //                .requestIdToken(getString(R.string.default_web_client_id))
@@ -64,13 +66,10 @@ public class CadastroActivity2 extends AppCompatActivity{
 //
 //        });
 
-        binding =  ActivityCadastro2Binding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-
 
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
+
 
         getSupportActionBar().hide();
 
@@ -94,6 +93,7 @@ public class CadastroActivity2 extends AppCompatActivity{
                                 usuarios = usuarios.child("Users");
                                 user.setUserId(id);
                                 usuarios.child(id).setValue(user);
+//                              usuarios.setValue(user);
 //
 //                                reference.push();
                                 Toast.makeText(CadastroActivity2.this, "Cadastrado com Sucesso!", Toast.LENGTH_LONG).show();
@@ -121,9 +121,16 @@ public class CadastroActivity2 extends AppCompatActivity{
             }
         });
 
+        binding.btnCancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.txtUsername.setText("");
+                binding.txtEmail.setText("");
+                binding.txtSenha.setText("");
+            }
+        });
 
     }
-
 
 //    private void SignIn() {
 //        Intent intent = gsc.getSignInIntent();

@@ -34,7 +34,6 @@ public class EntraActivity3 extends AppCompatActivity {
     ActivityEntra3Binding binding;       // biblioteca que permite vincular componentes do layout
     FirebaseDatabase firebaseDatabase;   // Banco de dados do Firebase
     private FirebaseAuth mAuth;          // Autenticação do Firebase
-    LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +86,14 @@ public class EntraActivity3 extends AppCompatActivity {
                 Intent intent = new Intent(EntraActivity3.this, CadastroActivity2.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        binding.btnCancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.txtEmail.setText("");
+                binding.txtSenha.setText("");
             }
         });
 

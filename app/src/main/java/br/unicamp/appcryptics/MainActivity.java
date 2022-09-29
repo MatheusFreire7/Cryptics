@@ -50,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
 
             case  R.id.logout:
                 mAuth.signOut();
-               Intent intent = new Intent(MainActivity.this,EntraActivity3.class);
-               startActivity(intent);
-               finish();
-               break;
+                Intent intent = new Intent(MainActivity.this,EntraActivity3.class);
+                startActivity(intent);
+                finish();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

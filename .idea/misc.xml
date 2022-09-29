@@ -18,11 +18,12 @@
         <entry key="..\:/Users/u21251/AndroidStudioProjects/AppCryptics/app/src/main/res/menu/menu.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/u21251/Documents/GitHub/Cryptics/app/src/main/res/drawable/bg_envia.xml" value="0.2385" />
         <entry key="..\:/Users/u21251/Documents/GitHub/Cryptics/app/src/main/res/drawable/bg_recebe.xml" value="0.2385" />
-        <entry key="..\:/Users/u21251/Documents/GitHub/Cryptics/app/src/main/res/layout/activity_cadastro2.xml" value="0.11302083333333333" />
+        <entry key="..\:/Users/u21251/Documents/GitHub/Cryptics/app/src/main/res/layout/activity_cadastro2.xml" value="0.33" />
         <entry key="..\:/Users/u21251/Documents/GitHub/Cryptics/app/src/main/res/layout/activity_chat.xml" value="0.25" />
-        <entry key="..\:/Users/u21251/Documents/GitHub/Cryptics/app/src/main/res/layout/activity_entra3.xml" value="0.25" />
-        <entry key="..\:/Users/u21251/Documents/GitHub/Cryptics/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/u21251/Documents/GitHub/Cryptics/app/src/main/res/layout/activity_entra3.xml" value="0.33" />
+        <entry key="..\:/Users/u21251/Documents/GitHub/Cryptics/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/u21251/Documents/GitHub/Cryptics/app/src/main/res/layout/fragment_chats.xml" value="0.2601851851851852" />
+        <entry key="..\:/Users/u21251/Documents/GitHub/Cryptics/app/src/main/res/layout/fragment_status.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/u21251/Documents/GitHub/Cryptics/app/src/main/res/layout/sample_envia.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/u21251/Documents/GitHub/Cryptics/app/src/main/res/layout/sample_recebe.xml" value="0.33" />
         <entry key="..\:/Users/u21251/Documents/GitHub/Cryptics/app/src/main/res/layout/sample_show_user.xml" value="0.2601851851851852" />
