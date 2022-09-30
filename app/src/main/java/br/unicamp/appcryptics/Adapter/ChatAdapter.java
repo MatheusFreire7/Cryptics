@@ -1,6 +1,8 @@
 package br.unicamp.appcryptics.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import br.unicamp.appcryptics.MessageModel;
 import br.unicamp.appcryptics.R;
@@ -24,6 +29,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
     int ENVIA_VIEW= 1;  // constantes
     int RECEBE_VIEW = 2;
+
     String recId;
 
     public ChatAdapter(ArrayList<MessageModel> listaMensagem, Context context) {
@@ -56,13 +62,49 @@ public class ChatAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             MessageModel messageModel = listaMensagem.get(position);
 
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    new AlertDialog.Builder(context)
+                            .setTitle("Deletar")
+                            .setMessage("Você quer deletar esta menssagem?")
+                            .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    String senderRoom = FirebaseAuth.getInstance().getUid() + recId;
+                                    database.getReference().child("chats").child(senderRoom)
+                                            .child(messageModel.getMessageId())
+                                            .setValue(null);
+                                }
+                            }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            }).show();
+                    return false;
+                }
+            });
+
             if(holder.getClass() == EnviaViewHolder.class)
             {
-                ((EnviaViewHolder) holder).enviaMsg.setText(messageModel.getMessage());
+                ((EnviaViewHolder)holder).enviaMsg.setText(messageModel.getMessage());
+
+                Date date = new Date(messageModel.getTimeStamp());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:mm a");
+                String strDate = simpleDateFormat.format(date);
+                ((EnviaViewHolder)holder).enviaTempo.setText(strDate.toString());
             }
             else
             {
-                ((RecebeViewHolder) holder).recebeMsg.setText(messageModel.getMessage());
+                ((RecebeViewHolder)holder).recebeMsg.setText(messageModel.getMessage());
+
+                Date date = new Date(messageModel.getTimeStamp());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:mm a");
+                String strDate = simpleDateFormat.format(date);
+                ((RecebeViewHolder)holder).recebeTempo.setText(strDate.toString());
             }
     }
 

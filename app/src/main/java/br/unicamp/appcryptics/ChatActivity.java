@@ -91,8 +91,8 @@ public class ChatActivity extends AppCompatActivity {
         binding.imgSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String mensagem = binding.digiteMessagem.getText().toString();
-                final MessageModel model = new MessageModel(enviaId,mensagem);
+                String menssagem = binding.digiteMessagem.getText().toString();
+                final MessageModel model = new MessageModel(enviaId,menssagem);
                 model.setTimeStamp(new Date().getTime());
                 binding.digiteMessagem.setText("");
 
@@ -104,6 +104,7 @@ public class ChatActivity extends AppCompatActivity {
                             public void onSuccess(Void unused) {
                                 database.getReference().child("chats")
                                         .child(receiverRoom)
+                                        .push()
                                         .setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
