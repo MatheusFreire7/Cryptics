@@ -89,10 +89,10 @@ public class CadastroActivity2 extends AppCompatActivity{
                             {
                                 String id = mAuth.getUid();
                                 //DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-                                DatabaseReference usuarios = FirebaseDatabase.getInstance().getReference();
-                                usuarios = usuarios.child("Users");
+                                //DatabaseReference usuarios = FirebaseDatabase.getInstance().getReference();
+                                // = usuarios.child("Users");
                                 user.setUserId(id);
-                                usuarios.child(id).setValue(user);
+                                firebaseDatabase.getReference().child("Users").child(id).setValue(user);
 //                              usuarios.setValue(user);
 //
 //                                reference.push();

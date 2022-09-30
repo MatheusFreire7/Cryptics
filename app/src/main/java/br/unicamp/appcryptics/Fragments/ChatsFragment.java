@@ -48,7 +48,7 @@ public class ChatsFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         binding.charRecyclerView.setLayoutManager(layoutManager);
 
-        database.getReference().child("Users1").addValueEventListener(new ValueEventListener() {
+        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
