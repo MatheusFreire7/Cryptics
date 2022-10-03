@@ -50,9 +50,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.viewHolder>
         Picasso.get().load(users.getFotoPerfil()).placeholder(R.drawable.avatar3).into(holder.image);
         holder.username.setText(users.getUsername());
 
+        //Acrescentado na Sprint 3 para exibir a ultimaMensagem enviada pelo usuário
         FirebaseDatabase.getInstance().getReference().child("chats")
                         .child(FirebaseAuth.getInstance().getUid() + users.getUserId())
-                                .orderByChild("timeStamp")
+                                .orderByChild("dataMensagem")
                                         .limitToLast(1)
                                                 .addListenerForSingleValueEvent(new ValueEventListener() {
                                                     @Override
@@ -70,6 +71,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.viewHolder>
 
                                                     }
                                                 });
+        ///////////////////////
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

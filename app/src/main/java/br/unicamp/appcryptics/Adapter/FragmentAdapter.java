@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import br.unicamp.appcryptics.Fragments.ChatsFragment;
+import br.unicamp.appcryptics.Fragments.ConfigFragment;
 import br.unicamp.appcryptics.Fragments.StatusFragment;
 
 public class FragmentAdapter extends FragmentPagerAdapter
@@ -25,6 +26,7 @@ public class FragmentAdapter extends FragmentPagerAdapter
       {
           case 0 : return new ChatsFragment();
           case 1 : return new StatusFragment();
+          case 2: return new ConfigFragment();
           default:return new ChatsFragment();
       }
     }
@@ -46,6 +48,10 @@ public class FragmentAdapter extends FragmentPagerAdapter
         if(position == 1)
         {
             title = "Status";
+        }
+        if(position == 2)
+        {
+            title = "Perfil"; // Tela de configurações do perfil do User
         }
        return title;
     }

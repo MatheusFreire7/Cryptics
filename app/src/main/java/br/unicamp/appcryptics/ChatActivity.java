@@ -93,7 +93,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String menssagem = binding.digiteMessagem.getText().toString();
                 final MessageModel model = new MessageModel(enviaId,menssagem);
-                model.setTimeStamp(new Date().getTime());
+                model.setDataMensagem(new Date().getTime());
                 binding.digiteMessagem.setText("");
 
                 database.getReference().child("chats")

@@ -2,13 +2,13 @@ package br.unicamp.appcryptics;
 
 public class MessageModel {
     String uId, message, messageId;
-    long timeStamp;
+    long dataMensagem;
 
 
-    public MessageModel(String uId, String message,long timeStamp) {
+    public MessageModel(String uId, String message,long dataMensagem) {
         this.uId = uId;
         this.message = message;
-        this.timeStamp = timeStamp;
+        this.dataMensagem = dataMensagem;
     }
 
     public MessageModel(String uId, String message) {
@@ -16,7 +16,7 @@ public class MessageModel {
         this.message = message;
     }
 
-    public MessageModel(){}
+    public MessageModel(){} // construtor vazio
 
     public String getuId() {
         return uId;
@@ -42,11 +42,11 @@ public class MessageModel {
         this.messageId = messageId;
     }
 
-    public long getTimeStamp() {
-        return timeStamp;
+    public long getDataMensagem() {
+        return dataMensagem;
     }
 
-    public void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setDataMensagem(long dataMensagem) {
+        this.dataMensagem = dataMensagem;
     }
 }

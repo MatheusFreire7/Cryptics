@@ -91,8 +91,4 @@ public class Usuario
         this.status = status;
     }
 
-    public void Salvar() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        reference.child("Usuarios").child(getUserId()).setValue(this);
-    }
 }
