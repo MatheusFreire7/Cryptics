@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import br.unicamp.appcryptics.Fragments.ChatsFragment;
 import br.unicamp.appcryptics.Fragments.ConfigFragment;
-import br.unicamp.appcryptics.Fragments.StatusFragment;
+import br.unicamp.appcryptics.Fragments.UsersFragment;
 
 public class FragmentAdapter extends FragmentPagerAdapter
 {
@@ -25,7 +25,7 @@ public class FragmentAdapter extends FragmentPagerAdapter
       switch (position)
       {
           case 0 : return new ChatsFragment();
-          case 1 : return new StatusFragment();
+          case 1 : return new UsersFragment();
           case 2: return new ConfigFragment();
           default:return new ChatsFragment();
       }
@@ -47,7 +47,7 @@ public class FragmentAdapter extends FragmentPagerAdapter
         }
         if(position == 1)
         {
-            title = "Status";
+            title = "Usuarios";
         }
         if(position == 2)
         {

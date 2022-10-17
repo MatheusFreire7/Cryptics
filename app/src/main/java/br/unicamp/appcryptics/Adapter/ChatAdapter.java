@@ -27,7 +27,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
     ArrayList<MessageModel> listaMensagem;
     Context context;
 
-    int ENVIA_VIEW= 1;  // constantes
+    int ENVIA_VIEW= 1;  // constantes de opções do chat
     int RECEBE_VIEW = 2;
 
     String recId;
@@ -76,12 +76,12 @@ public class ChatAdapter extends RecyclerView.Adapter {
                                     String senderRoom = FirebaseAuth.getInstance().getUid() + recId;
                                     database.getReference().child("chats").child(senderRoom)
                                             .child(messageModel.getMessageId())
-                                            .setValue(null);
+                                            .setValue(null); // excluimos a mensagem pelo id da mensagem
                                 }
                             }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.dismiss();
+                                    dialogInterface.dismiss(); // fecha a janela
                                 }
                             }).show();
                     return false;
