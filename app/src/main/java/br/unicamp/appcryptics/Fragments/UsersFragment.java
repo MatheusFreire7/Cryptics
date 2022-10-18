@@ -22,6 +22,7 @@ import br.unicamp.appcryptics.Adapter.UsersAdapter;
 import br.unicamp.appcryptics.R;
 import br.unicamp.appcryptics.Usuario;
 import br.unicamp.appcryptics.databinding.FragmentChatsBinding;
+import br.unicamp.appcryptics.databinding.FragmentUsersBinding;
 
 
 public class UsersFragment extends Fragment {
@@ -31,14 +32,14 @@ public class UsersFragment extends Fragment {
 
     }
 
-    FragmentChatsBinding binding;
+    FragmentUsersBinding binding;
     ArrayList<Usuario> listUsuario = new ArrayList<>();
     FirebaseDatabase database;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentChatsBinding.inflate(inflater,container,false);
+        binding = FragmentUsersBinding.inflate(inflater,container,false);
         database = FirebaseDatabase.getInstance();
 
         UsersAdapter adapter = new UsersAdapter(listUsuario,getContext());
@@ -56,26 +57,11 @@ public class UsersFragment extends Fragment {
                 {
                     Usuario users = dataSnapshot.getValue(Usuario.class);
                     users.setUserId(dataSnapshot.getKey());
-                    FirebaseDatabase.getInstance().getReference().child("chats")
-                            .child(FirebaseAuth.getInstance().getUid() + users.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot1) {
-                                    if(snapshot1.hasChildren()) {
-                                        for (DataSnapshot snapshot : snapshot1.getChildren()) {
-                                         String uId = snapshot.child("uId").getValue().toString();
-                                            if (!users.getUserId().equals(FirebaseAuth.getInstance().getUid()) && users.getUserId() == uId){
-                                                listUsuario.add(users);
-                                            }
-                                        }
-                                    }
-                                }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-
+                    if(!users.getUserId().equals(FirebaseAuth.getInstance().getUid()))
+                    {
+                        listUsuario.add(users);
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }
