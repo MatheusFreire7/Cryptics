@@ -1,33 +1,26 @@
 package br.unicamp.appcryptics;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.telephony.mbms.DownloadProgressListener;
-import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
-import com.google.android.gms.auth.api.identity.SignInClient;
-import com.google.android.gms.auth.api.identity.SignInCredential;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import br.unicamp.appcryptics.API.LoginResponse;
+import br.unicamp.appcryptics.API.RetrofitClient;
 import br.unicamp.appcryptics.databinding.ActivityEntra3Binding;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EntraActivity3 extends AppCompatActivity {
 
@@ -94,6 +87,35 @@ public class EntraActivity3 extends AppCompatActivity {
             public void onClick(View v) {
                 binding.txtEmail.setText("");
                 binding.txtSenha.setText("");
+            }
+        });
+
+    }
+
+    private void userLogin() {
+        String email = binding.txtEmail.getText().toString().trim();
+        String senha = binding.txtSenha.getText().toString().trim();
+
+        Call<LoginResponse> call = RetrofitClient
+                .getInstance()
+                .getAPI()
+                .loginUser(email, senha);
+
+        call.enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                LoginResponse loginResponse = response.body();
+
+                if(!loginResponse.isError()){
+                    Toast.makeText(EntraActivity3.this, loginResponse.getMessage(), Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(EntraActivity3.this, loginResponse.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Toast.makeText(EntraActivity3.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 

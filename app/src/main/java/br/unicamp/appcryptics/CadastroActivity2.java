@@ -32,8 +32,15 @@ import com.google.firebase.database.core.Tag;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+
+import br.unicamp.appcryptics.API.RetrofitClient;
 import br.unicamp.appcryptics.databinding.ActivityCadastro2Binding;
 import br.unicamp.appcryptics.databinding.ActivityEntra3Binding;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CadastroActivity2 extends AppCompatActivity{
     ActivityCadastro2Binding binding;  // biblioteca que permite vincular componentes do layout
@@ -112,6 +119,8 @@ public class CadastroActivity2 extends AppCompatActivity{
             }
         });
 
+
+
         binding.txtExisteConta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -130,6 +139,35 @@ public class CadastroActivity2 extends AppCompatActivity{
             }
         });
 
+    }
+
+    private void registerUser(){
+        String username = binding.txtUsername.getText().toString().trim();
+        String email = binding.txtEmail.getText().toString().trim();
+        String senha = binding.txtSenha.getText().toString().trim();
+
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getAPI()
+                .registerUser(username,email,senha);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try{
+                    String body = response.body().string();
+                    Toast.makeText(CadastroActivity2.this, body, Toast.LENGTH_LONG).show();
+
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(CadastroActivity2.this, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 //    private void SignIn() {
