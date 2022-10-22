@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
 import br.unicamp.appcryptics.Adapter.FragmentAdapter;
+import br.unicamp.appcryptics.databinding.ActivityConfigBinding;
 import br.unicamp.appcryptics.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId())
         {
             case R.id.settings:
-                Toast.makeText(this, "Configurações Clicada", Toast.LENGTH_LONG).show();
+                Intent intent2 = new Intent(MainActivity.this, ConfigActivity.class);
+                startActivity(intent2);
                 break;
 
             case  R.id.logout:

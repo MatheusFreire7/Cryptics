@@ -1,66 +1,179 @@
 package br.unicamp.appcryptics.Fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.preference.PreferenceManager;
+import android.renderscript.ScriptGroup;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+
+import br.unicamp.appcryptics.ConfigActivity;
+import br.unicamp.appcryptics.MainActivity;
 import br.unicamp.appcryptics.R;
+import br.unicamp.appcryptics.Usuario;
+import br.unicamp.appcryptics.databinding.ActivityConfigBinding;
+import br.unicamp.appcryptics.databinding.FragmentConfigBinding;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ConfigFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ConfigFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    FragmentConfigBinding binding;
+    FirebaseAuth auth;
+    FirebaseDatabase database;
+    FirebaseStorage storage;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public ConfigFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ConfigFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ConfigFragment newInstance(String param1, String param2) {
-        ConfigFragment fragment = new ConfigFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_config, container, false);
+        binding = FragmentConfigBinding.inflate(getLayoutInflater());
+        binding.getRoot();
+
+
+        storage = FirebaseStorage.getInstance();
+        auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+
+        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren())
+                {
+                    Usuario users = dataSnapshot.getValue(Usuario.class);
+                    users.setUserId(dataSnapshot.getKey());
+
+                    if(users.getUserId().equals(FirebaseAuth.getInstance().getUid()))
+                    {
+                        if(dataSnapshot.child("username").exists())
+                            binding.txtUsername.setText(dataSnapshot.child("username").getValue().toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot2)
+            {
+                for(DataSnapshot dataSnapshot2 : snapshot2.getChildren())
+                {
+                    Usuario users = dataSnapshot2.getValue(Usuario.class);
+                    users.setUserId(dataSnapshot2.getKey());
+
+                    if(users.getUserId().equals(FirebaseAuth.getInstance().getUid()))
+                    {
+                        if(dataSnapshot2.child("sobre").exists())
+                            binding.txtSobre.setText(dataSnapshot2.child("sobre").getValue().toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot3)
+            {
+                for(DataSnapshot dataSnapshot3 : snapshot3.getChildren())
+                {
+                    Usuario users = dataSnapshot3.getValue(Usuario.class);
+                    users.setUserId(dataSnapshot3.getKey());
+
+                    if(users.getUserId().equals(FirebaseAuth.getInstance().getUid()))
+                    {
+                        if(dataSnapshot3.child("email").exists())
+                            binding.txtEmail.setText(dataSnapshot3.child("email").getValue().toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+        binding.btnAlterar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(binding.txtSobre.getText().toString() != " " && binding.txtUsername.getText().toString() != " " )
+                {
+                    String email = binding.txtEmail.getText().toString();
+                    String sobre = binding.txtSobre.getText().toString();
+                    String username = binding.txtUsername.getText().toString();
+                    String senha = binding.txtSenha.getText().toString();
+
+                    HashMap<String,Object> obj = new HashMap<>();
+                    obj.put("email", email);
+                    obj.put("username", username);
+                    obj.put("senha", senha);
+                    obj.put("sobre", sobre);
+
+                    database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid())
+                            .updateChildren(obj);
+
+
+                }
+                binding.txtSenha.setText(""); // apaga a senha para funcionar como uma proteção
+            }
+        });
+
+        database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Usuario users = snapshot.getValue(Usuario.class);
+                        Picasso.get()
+                                .load(users.getFotoPerfil())
+                                .placeholder(R.drawable.avatar)
+                                .into(binding.profileImage);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+
+        return binding.getRoot();
     }
+
 }

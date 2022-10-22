@@ -85,6 +85,7 @@ public class CadastroActivity2 extends AppCompatActivity{
             public void onClick(View view) {
                 if(!binding.txtEmail.getText().toString().isEmpty() && !binding.txtUsername.getText().toString().isEmpty() && !binding.txtSenha.getText().toString().isEmpty())
                 {
+                    registerUser();
                     Usuario user = new Usuario();
                     user.setUsername(binding.txtUsername.getText().toString());
                     user.setEmail(binding.txtEmail.getText().toString());

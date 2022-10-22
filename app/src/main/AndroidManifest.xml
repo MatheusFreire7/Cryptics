@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="br.unicamp.appcryptics"
-    android:usesCleartextTraffic="true">
+    package="br.unicamp.appcryptics">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -16,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCryptics"
         android:usesCleartextTraffic="true"
-        android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
         <activity
             android:name=".ChatActivity"
@@ -32,10 +30,13 @@
         </activity>
         <activity
             android:name=".CadastroActivity2"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
+        <activity
+            android:name=".ConfigActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
