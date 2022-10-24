@@ -29,10 +29,14 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.core.Tag;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import br.unicamp.appcryptics.API.RetrofitClient;
 import br.unicamp.appcryptics.databinding.ActivityCadastro2Binding;
@@ -80,42 +84,75 @@ public class CadastroActivity2 extends AppCompatActivity{
 
         getSupportActionBar().hide();
 
+
+
         binding.btnCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Validações
+                if(binding.txtEmail.getText().toString().isEmpty())
+                    Toast.makeText(CadastroActivity2.this, "Preencha o campo e-mail", Toast.LENGTH_SHORT).show();
+
+                if(!validarEmail(binding.txtEmail.getText().toString()))
+                {
+                    Toast.makeText(CadastroActivity2.this, "Digite um e-mail válido", Toast.LENGTH_SHORT).show();
+                }
+
+                if(binding.txtUsername.getText().toString().isEmpty())
+                    Toast.makeText(CadastroActivity2.this, "Preencha o campo Username", Toast.LENGTH_SHORT).show();
+
+                if(binding.txtSenha.getText().toString().isEmpty())
+                    Toast.makeText(CadastroActivity2.this, "Preencha o campo senha", Toast.LENGTH_SHORT).show();
+
+                if(binding.txtSenha.getText().toString().length() < 6)
+                    Toast.makeText(CadastroActivity2.this, "Digite uma senha com pelo menos 6 digitos", Toast.LENGTH_SHORT).show();
+
+
                 if(!binding.txtEmail.getText().toString().isEmpty() && !binding.txtUsername.getText().toString().isEmpty() && !binding.txtSenha.getText().toString().isEmpty())
                 {
-                    registerUser();
-                    Usuario user = new Usuario();
-                    user.setUsername(binding.txtUsername.getText().toString());
-                    user.setEmail(binding.txtEmail.getText().toString());
-                    user.setSenha(binding.txtSenha.getText().toString());
-                    mAuth.createUserWithEmailAndPassword(binding.txtEmail.getText().toString(), binding.txtSenha.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    String username = binding.txtUsername.getText().toString().trim();
+                    String email = binding.txtEmail.getText().toString().trim();
+                    String senha = binding.txtSenha.getText().toString().trim();
+                    Usuario user = new Usuario(username,email,senha);
+                    Call<Usuario> call = RetrofitClient
+                            .getInstance()
+                            .getAPI()
+                            .registerUser(user);
+
+                    call.enqueue(new Callback<Usuario>() {
                         @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()) // se conseguiu cadastrar
-                            {
-                                String id = mAuth.getUid();
-                                //DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-                                //DatabaseReference usuarios = FirebaseDatabase.getInstance().getReference();
-                                // = usuarios.child("Users");
-                                user.setUserId(id);
-                                firebaseDatabase.getReference().child("Users").child(id).setValue(user);
-//                              usuarios.setValue(user);
-//
-//                                reference.push();
+                        public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                            Usuario registerResponse = response.body();
+                            Gson gson = new GsonBuilder().create();
+                            String jsonRespostaNode = gson.toJson(registerResponse);
+                            if(response.isSuccessful()){
+                                mAuth.createUserWithEmailAndPassword(binding.txtEmail.getText().toString(), binding.txtSenha.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if(task.isSuccessful()) // se conseguiu cadastrar
+                                        {
+                                            String id = mAuth.getUid();
+                                            user.setUserId(id);
+                                            firebaseDatabase.getReference().child("Users").child(id).setValue(user);
+                                        }
+                                        else // senão conseguiu cadastrar
+                                        {
+                                            Toast.makeText(CadastroActivity2.this, "Erro no cadastro no Firebase", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
                                 Toast.makeText(CadastroActivity2.this, "Cadastrado com Sucesso!", Toast.LENGTH_LONG).show();
-                            }
-                            else // senão conseguiu cadastrar
-                            {
-                                Toast.makeText(CadastroActivity2.this, "E-mail já cadastrado", Toast.LENGTH_LONG).show();
+                            }else{
+
+                                Toast.makeText(CadastroActivity2.this,  "Erro no cadastro", Toast.LENGTH_LONG).show();
                             }
                         }
+
+                        @Override
+                        public void onFailure(Call<Usuario> call, Throwable t) {
+                            Toast.makeText(CadastroActivity2.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
                     });
-                }
-                else // se o usuario não preencheu todas as informações irá retornar esta mesnsagem
-                {
-                    Toast.makeText(CadastroActivity2.this, "Preencha todos os Campos para se Cadastrar", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -146,29 +183,41 @@ public class CadastroActivity2 extends AppCompatActivity{
         String username = binding.txtUsername.getText().toString().trim();
         String email = binding.txtEmail.getText().toString().trim();
         String senha = binding.txtSenha.getText().toString().trim();
-
-        Call<ResponseBody> call = RetrofitClient
+        Usuario user = new Usuario(username,email,senha);
+        Call<Usuario> call = RetrofitClient
                 .getInstance()
                 .getAPI()
-                .registerUser(username,email,senha);
+                .registerUser(user);
 
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new Callback<Usuario>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try{
-                    String body = response.body().string();
-                    Toast.makeText(CadastroActivity2.this, body, Toast.LENGTH_LONG).show();
-
-                }catch (IOException e){
-                    e.printStackTrace();
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                Usuario registerResponse = response.body();
+                Gson gson = new GsonBuilder().create();
+                String jsonRespostaNode = gson.toJson(registerResponse);
+                if(response.isSuccessful()){
+                    Toast.makeText(CadastroActivity2.this, "Cadastro realizado com sucesso", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(CadastroActivity2.this, "Erro no Cadastro", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<Usuario> call, Throwable t) {
                 Toast.makeText(CadastroActivity2.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+            + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+    final Pattern pattern = Pattern.compile(EMAIL_PATTERN, Pattern.CASE_INSENSITIVE);
+
+    //Verificação de email
+    boolean validarEmail(String email){
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
 //    private void SignIn() {

@@ -22,7 +22,7 @@ public class Usuario
         this.status = status;
     }
 
-    public Usuario(String username, String senha, String email) {
+    public Usuario(String username,String email, String senha) {
         this.username = username;
         this.email = email;
         this.senha = senha;
@@ -31,6 +31,11 @@ public class Usuario
     public Usuario(String userId,String username, String senha, String email) {
         this.userId = userId;
         this.username = username;
+        this.email = email;
+        this.senha = senha;
+    }
+
+    public Usuario(String email, String senha) {
         this.email = email;
         this.senha = senha;
     }

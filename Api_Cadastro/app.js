@@ -57,7 +57,7 @@ app.post('/auth/register', async(req,res) => {
         return res.status(422).json({msg: 'A senha é Obrigatória'})
     }
 
-    if(!senha.length <= 6){
+    if(!senha.length >= 6){
         return res.status(422).json({msg: 'Digite uma senha com mais de 6 digitos!'})
     }
 

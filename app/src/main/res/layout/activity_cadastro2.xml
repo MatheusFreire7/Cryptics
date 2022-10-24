@@ -109,33 +109,19 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id='@+id/btnFacebook'
+            android:id='@+id/btnCancelar'
             android:layout_marginStart="4dp"
             android:layout_marginLeft="4dp"
             android:layout_weight="1"
-            android:drawableLeft='@drawable/ic_facebook'
             android:padding="15dp"
-            android:text='Facebook'
+            android:text='Cancelar'
             android:textAllCaps="false"
             android:textColor='@color/black'
             app:backgroundTint='@color/fb_color'
             app:cornerRadius="8dp"/>
 
     </LinearLayout>
-        <Button
-            android:layout_width="130dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center"
-            android:id='@+id/btnCancelar'
-            android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_weight="1"
-            android:padding="15dp"
-            android:text='Cancelar'
-            android:textAllCaps="false"
-            android:textColor='@color/black'
-            app:backgroundTint='@color/whatsAppColor'
-            app:cornerRadius="8dp"/>
+
 
     </LinearLayout>
 

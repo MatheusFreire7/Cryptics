@@ -13,6 +13,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import br.unicamp.appcryptics.API.LoginResponse;
 import br.unicamp.appcryptics.API.RetrofitClient;
@@ -45,19 +47,32 @@ public class EntraActivity3 extends AppCompatActivity {
             public void onClick(View view) {
                 if(!binding.txtEmail.getText().toString().isEmpty() && !binding.txtSenha.getText().toString().isEmpty())
                 {
-                    userLogin();
-                    mAuth.signInWithEmailAndPassword(binding.txtEmail.getText().toString(), binding.txtSenha.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    String email = binding.txtEmail.getText().toString().trim();
+                    String senha = binding.txtSenha.getText().toString().trim();
+                    Usuario user = new Usuario(email,senha);
+                    Call<Usuario> call = RetrofitClient
+                            .getInstance()
+                            .getAPI()
+                            .loginUser(user);
+
+                    call.enqueue(new Callback<Usuario>() {
                         @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful())
-                            {
+                        public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                            Usuario loginResponse = response.body();
+                            Gson gson = new GsonBuilder().create();
+                            String jsonRespostaNode = gson.toJson(loginResponse);
+                            if(response.isSuccessful()){
+                                mAuth.signInWithEmailAndPassword(binding.txtEmail.getText().toString(), binding.txtSenha.getText().toString());
                                 Intent intent = new Intent(EntraActivity3.this, MainActivity.class);
                                 startActivity(intent);
+                            }else{
+                                Toast.makeText(EntraActivity3.this, "Usuário não encontrado", Toast.LENGTH_LONG).show();
                             }
-                            else
-                            {
-                                Toast.makeText(EntraActivity3.this, "Conta Não Encontrada!", Toast.LENGTH_LONG).show();
-                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Usuario> call, Throwable t) {
+                            Toast.makeText(EntraActivity3.this, t.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -96,26 +111,28 @@ public class EntraActivity3 extends AppCompatActivity {
     private void userLogin() {
         String email = binding.txtEmail.getText().toString().trim();
         String senha = binding.txtSenha.getText().toString().trim();
-
-        Call<LoginResponse> call = RetrofitClient
+        Usuario user = new Usuario(email,senha);
+        Call<Usuario> call = RetrofitClient
                 .getInstance()
                 .getAPI()
-                .loginUser(email, senha);
+                .loginUser(user);
 
-        call.enqueue(new Callback<LoginResponse>() {
+        call.enqueue(new Callback<Usuario>() {
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                LoginResponse loginResponse = response.body();
-
-                if(!loginResponse.isError()){
-                    Toast.makeText(EntraActivity3.this, loginResponse.getMessage(), Toast.LENGTH_LONG).show();
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                Usuario loginResponse = response.body();
+                Gson gson = new GsonBuilder().create();
+                String jsonRespostaNode = gson.toJson(loginResponse);
+                if(response.isSuccessful()){
+                    Intent intent = new Intent(EntraActivity3.this, MainActivity.class);
+                    startActivity(intent);
                 }else{
-                    Toast.makeText(EntraActivity3.this, loginResponse.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(EntraActivity3.this, "Usuário não encontrado", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
+            public void onFailure(Call<Usuario> call, Throwable t) {
                 Toast.makeText(EntraActivity3.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

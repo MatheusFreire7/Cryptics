@@ -1,25 +1,18 @@
 package br.unicamp.appcryptics.API;
 
+import br.unicamp.appcryptics.Usuario;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public interface Api {
-    @FormUrlEncoded
-    @POST("register")
-    Call<ResponseBody> registerUser(
-        @Field("username") String username,
-                @Field("email") String email,
-                        @Field("senha") String senha
-    );
+    @POST("/auth/register")
+    Call<Usuario> registerUser(@Body Usuario user);
 
-    @FormUrlEncoded
-    @POST("login")
-    Call<LoginResponse> loginUser(
-            @Field("email") String email,
-            @Field("senha") String senha
-    );
+    @POST("/auth/login")
+    Call<Usuario> loginUser(@Body Usuario user);
 
 }

@@ -100,6 +100,12 @@ public class ConfigActivity extends AppCompatActivity {
         binding.btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(binding.txtSobre.getText().toString().isEmpty())
+                    Toast.makeText(ConfigActivity.this, "Preencha o campo sobre", Toast.LENGTH_SHORT).show();
+
+                if(binding.txtUsername.getText().toString().isEmpty())
+                    Toast.makeText(ConfigActivity.this, "Preencha o campo username", Toast.LENGTH_SHORT).show();
+
                 if(binding.txtSobre.getText().toString() != " " && binding.txtUsername.getText().toString() != " " )
                 {
                     String sobre = binding.txtSobre.getText().toString();
@@ -114,8 +120,6 @@ public class ConfigActivity extends AppCompatActivity {
 
                     Toast.makeText(ConfigActivity.this, "Foi salvo com sucesso", Toast.LENGTH_LONG).show();
                 }
-                else
-                    Toast.makeText(ConfigActivity.this, "Preencha ambos os Campos", Toast.LENGTH_SHORT).show();
 
             }
         });

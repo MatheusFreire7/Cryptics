@@ -3,6 +3,7 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+
 android {
     compileSdk 32
 
@@ -27,6 +28,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
+
+
 
 android {
     buildFeatures.dataBinding = true
