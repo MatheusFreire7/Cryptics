@@ -1,5 +1,6 @@
 package br.unicamp.appcryptics.Fragments;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.EmailAuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,16 +26,23 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
+import br.unicamp.appcryptics.API.RetrofitClient;
 import br.unicamp.appcryptics.ConfigActivity;
+import br.unicamp.appcryptics.EntraActivity3;
 import br.unicamp.appcryptics.MainActivity;
 import br.unicamp.appcryptics.R;
 import br.unicamp.appcryptics.Usuario;
 import br.unicamp.appcryptics.databinding.ActivityConfigBinding;
 import br.unicamp.appcryptics.databinding.FragmentConfigBinding;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class ConfigFragment extends Fragment {
@@ -135,9 +144,49 @@ public class ConfigFragment extends Fragment {
                 if(binding.txtSobre.getText().toString() != " " && binding.txtUsername.getText().toString() != " " )
                 {
                     String email = binding.txtEmail.getText().toString();
+                    String emailAntigo = binding.txtEmailAntigo.getText().toString(); // chave primária do usuário
                     String sobre = binding.txtSobre.getText().toString();
                     String username = binding.txtUsername.getText().toString();
                     String senha = binding.txtSenha.getText().toString();
+
+
+                    Usuario user = new Usuario(username,email,senha);
+                    Call<Usuario> call = RetrofitClient
+                            .getInstance()
+                            .getAPI()
+                            .alterarUser(emailAntigo,user);
+
+                    call.enqueue(new Callback<Usuario>() {
+                        @Override
+                        public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                            Usuario loginResponse = response.body();
+                            Gson gson = new GsonBuilder().create();
+                            String jsonRespostaNode = gson.toJson(loginResponse);
+                            if(response.isSuccessful()){
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                    builder.setCancelable(true);
+                                    builder.setTitle("Alteração do Usuário");
+                                    builder.setMessage("A alteração do Usuário Foi realizado com sucessi");
+                                    builder.show();
+
+                            }else{
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                builder.setCancelable(true);
+                                builder.setTitle("Alteração do Usuário");
+                                builder.setMessage("A alteração do Usuário não foi realizada");
+                                builder.show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Usuario> call, Throwable t) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setCancelable(true);
+                            builder.setTitle("Alteração do Usuário");
+                            builder.setMessage(t.getMessage().toString());
+                            builder.show();
+                        }
+                    });
 
                     HashMap<String,Object> obj = new HashMap<>();
                     obj.put("email", email);
