@@ -1,13 +1,34 @@
 package br.unicamp.appcryptics;
 
 public class MessageModel {
-    String uId, message, messageId;
+    String uId, message, messageId, image;
     long dataMensagem;
 
 
-    public MessageModel(String uId, String message,long dataMensagem) {
+    public MessageModel(String uId, String message, String messageId, String image) {
         this.uId = uId;
         this.message = message;
+        this.messageId = messageId;
+        this.image = image;
+    }
+
+    public MessageModel(String uId, String message, long dataMensagem) {
+        this.uId = uId;
+        this.message = message;
+        this.dataMensagem = dataMensagem;
+    }
+
+    public MessageModel(String uId, String message, String image) {
+        this.uId = uId;
+        this.message = message;
+        this.image = image;
+    }
+
+    public MessageModel(String uId, String message, String messageId, String image, long dataMensagem) {
+        this.uId = uId;
+        this.message = message;
+        this.messageId = messageId;
+        this.image = image;
         this.dataMensagem = dataMensagem;
     }
 
@@ -28,6 +49,14 @@ public class MessageModel {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public void setMessage(String message) {

@@ -53,12 +53,17 @@ public class ChatsFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
                 listUsuario.clear();
+                String id;
+                String idAtual = FirebaseAuth.getInstance().getUid();
+                String senderRoom;
                 for(DataSnapshot dataSnapshot : snapshot.getChildren())
                 {
                     Usuario users = dataSnapshot.getValue(Usuario.class);
                     users.setUserId(dataSnapshot.getKey());
+                    id = dataSnapshot.getKey();
+                    senderRoom = idAtual + id;
 
-                    if(!users.getUserId().equals(FirebaseAuth.getInstance().getUid()))
+                    if(!users.getUserId().equals(FirebaseAuth.getInstance().getUid()) && !dataSnapshot.child("senderRoom").exists())
                     {
                         listUsuario.add(users);
                     }

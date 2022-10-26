@@ -35,6 +35,16 @@
             android:paddingBottom="10dp"/>
 
         <ImageView
+            android:layout_width="20dp"
+            android:layout_height="30dp"
+            android:id="@+id/btnSendImage"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="0"
+            app:srcCompat = "@drawable/anexo"/>
+
+        <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:id="@+id/imgSend"
