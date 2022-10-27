@@ -42,6 +42,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         getSupportActionBar().hide();
+        //binding.chatRecyclerView.setVerticalScrollBarEnabled(true); // habilita o scrollbar
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
@@ -68,8 +69,9 @@ public class ChatActivity extends AppCompatActivity {
 
         binding.chatRecyclerView.setAdapter(chatAdapter);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        binding.chatRecyclerView.setLayoutManager(layoutManager);
+        //LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        binding.chatRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
 
         final String senderRoom = enviaId + recebeId;
         final String receiverRoom = recebeId + enviaId;
@@ -162,10 +164,10 @@ public class ChatActivity extends AppCompatActivity {
                     reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri)
-                        {
-                            final MessageModel model = new MessageModel(enviaId,menssagem,uri.toString());
+                        {  final MessageModel model = new MessageModel(enviaId,menssagem,uri.toString());
+                            model.setImage(uri.toString());
                             model.setDataMensagem(new Date().getTime());
-                            database.getReference().child("chats").child(FirebaseAuth.getInstance().getUid())
+                            database.getReference().child("chats")
                                     .child(senderRoom)
                                     .push()
                                     .setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {

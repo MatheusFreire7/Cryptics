@@ -166,7 +166,7 @@ public class ConfigFragment extends Fragment {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                                     builder.setCancelable(true);
                                     builder.setTitle("Alteração do Usuário");
-                                    builder.setMessage("A alteração do Usuário Foi realizado com sucessi");
+                                    builder.setMessage("A alteração do Usuário Foi realizado com sucesso");
                                     builder.show();
 
                             }else{
@@ -202,6 +202,60 @@ public class ConfigFragment extends Fragment {
                 binding.txtSenha.setText(""); // apaga a senha para funcionar como uma proteção
             }
         });
+
+        binding.btnExcluir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(binding.txtEmailAntigo.getText().toString() != " ")
+                {
+                    //String email = binding.txtEmail.getText().toString();
+                    String emailAntigo = binding.txtEmailAntigo.getText().toString(); // chave primária do usuário
+                    //String sobre = binding.txtSobre.getText().toString();
+                    //String username = binding.txtUsername.getText().toString();
+                    //String senha = binding.txtSenha.getText().toString();
+
+
+                    Usuario user = new Usuario(emailAntigo);
+                    Call<Usuario> call = RetrofitClient
+                            .getInstance()
+                            .getAPI()
+                            .excluirUser(emailAntigo);
+
+                    call.enqueue(new Callback<Usuario>() {
+                        @Override
+                        public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                            Usuario loginResponse = response.body();
+                            Gson gson = new GsonBuilder().create();
+                            String jsonRespostaNode = gson.toJson(loginResponse);
+                            if(response.isSuccessful()){
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                builder.setCancelable(true);
+                                builder.setTitle("Exclusão do Usuário");
+                                builder.setMessage("A exclusão do Usuário Foi realizado com sucesso");
+                                builder.show();
+
+                            }else{
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                builder.setCancelable(true);
+                                builder.setTitle("Exclusão do Usuário");
+                                builder.setMessage("A exclusão do Usuário não foi realizada");
+                                builder.show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Usuario> call, Throwable t) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setCancelable(true);
+                            builder.setTitle("Exclusão do Usuário");
+                            builder.setMessage(t.getMessage().toString());
+                            builder.show();
+                        }
+                    });
+                }
+            }
+        });
+
 
         database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {

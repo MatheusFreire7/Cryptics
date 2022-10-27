@@ -3,10 +3,12 @@ package br.unicamp.appcryptics.Adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,7 +93,13 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
             if(holder.getClass() == EnviaViewHolder.class)
             {
-                ((EnviaViewHolder)holder).enviaMsg.setText(messageModel.getMessage());
+                if(messageModel.getMessage() != " ")
+                    ((EnviaViewHolder)holder).enviaMsg.setText(messageModel.getMessage());
+
+                if(messageModel.getImage() != " ")
+                {
+                    Picasso.get().load(messageModel.getImage()).into(((EnviaViewHolder)holder).enviaImage);
+                }
 
                 //Exibir Data de envio da mensagem
                 Date date = new Date(messageModel.getDataMensagem());
@@ -101,6 +110,11 @@ public class ChatAdapter extends RecyclerView.Adapter {
             else
             {
                 ((RecebeViewHolder)holder).recebeMsg.setText(messageModel.getMessage());
+
+                if(messageModel.getImage() != "")
+                {
+                    Picasso.get().load(messageModel.getImage()).into(((RecebeViewHolder)holder).recebeImage);
+                }
 
                 //Exibir Data de recebimento da mensagem
                 Date date = new Date(messageModel.getDataMensagem());
@@ -131,6 +145,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
     public class RecebeViewHolder extends RecyclerView.ViewHolder{
 
         TextView recebeMsg, recebeTempo;
+        ImageView recebeImage;
 
 
         public RecebeViewHolder(@NonNull View itemView) {
@@ -138,18 +153,21 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
             recebeMsg = itemView.findViewById(R.id.txtRecebe);
             recebeTempo = itemView.findViewById(R.id.recebeTempo);
+            recebeImage = itemView.findViewById(R.id.imgRecebe);
         }
     }
 
     public class EnviaViewHolder extends RecyclerView.ViewHolder{
 
         TextView enviaMsg, enviaTempo;
+        ImageView enviaImage;
 
         public EnviaViewHolder(@NonNull View itemView) {
             super(itemView);
 
             enviaMsg = itemView.findViewById(R.id.txtEnvia);
             enviaTempo = itemView.findViewById(R.id.enviaTempo);
+            enviaImage = itemView.findViewById(R.id.imgEnvia);
         }
     }
 }

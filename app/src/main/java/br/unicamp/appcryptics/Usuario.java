@@ -12,6 +12,10 @@ public class Usuario
 
     }
 
+    public Usuario(String email) {
+        this.email = email;
+    }
+
     public Usuario(String fotoPerfil, String username, String email, String senha, String userId, String ultimaMensagem, String status) {
         this.fotoPerfil = fotoPerfil;
         this.username = username;

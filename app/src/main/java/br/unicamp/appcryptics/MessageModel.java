@@ -52,7 +52,7 @@ public class MessageModel {
     }
 
     public String getImage() {
-        return image;
+        return this.image;
     }
 
     public void setImage(String image) {
