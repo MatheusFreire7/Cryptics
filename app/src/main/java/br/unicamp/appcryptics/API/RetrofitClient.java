@@ -4,7 +4,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    private static final String BASE_URL = "http://177.220.18.12:3000";
+    private static final String BASE_URL = "http://177.220.18.12:3000"; // Cotuca
     private static RetrofitClient mInstance;
     private Retrofit retrofit;
 

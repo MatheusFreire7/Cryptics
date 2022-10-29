@@ -262,10 +262,11 @@ public class ConfigFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Usuario users = snapshot.getValue(Usuario.class);
-                        Picasso.get()
-                                .load(users.getFotoPerfil())
-                                .placeholder(R.drawable.avatar)
-                                .into(binding.profileImage);
+                            Picasso.get()
+                                    .load(users.getFotoPerfil())
+                                    .placeholder(R.drawable.avatar)
+                                    .into(binding.profileImage);
+
                     }
 
                     @Override

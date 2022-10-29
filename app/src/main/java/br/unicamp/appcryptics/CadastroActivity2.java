@@ -52,7 +52,7 @@ public class CadastroActivity2 extends AppCompatActivity{
     FirebaseDatabase firebaseDatabase; // Banco de dados do Firebase
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
-    //private  DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+    private  DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
 
     @Override
@@ -62,20 +62,20 @@ public class CadastroActivity2 extends AppCompatActivity{
         binding =  ActivityCadastro2Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-//        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken(getString(R.string.default_web_client_id))
-//                .requestEmail()
-//                .build();
-//
-//        gsc = GoogleSignIn.getClient(this, gso);
-//
-//        binding.btnGoogle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                SignIn();
-//            }
-//
-//        });
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        gsc = GoogleSignIn.getClient(this, gso);
+
+        binding.btnGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SignIn();
+            }
+
+        });
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -177,6 +177,13 @@ public class CadastroActivity2 extends AppCompatActivity{
             }
         });
 
+        binding.btnGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SignIn();
+            }
+        });
+
     }
 
     private void registerUser(){
@@ -220,55 +227,60 @@ public class CadastroActivity2 extends AppCompatActivity{
         return matcher.matches();
     }
 
-//    private void SignIn() {
-//        Intent intent = gsc.getSignInIntent();
-//        startActivityForResult(intent,100);
-//    }
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode,@Nullable Intent data){
-//        super.onActivityResult(requestCode,resultCode,data);
-//
-//        if(requestCode == 100){
-//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-//            try{
-//                GoogleSignInAccount account = task.getResult(ApiException.class);
-//                Log.d("TAG", "firebaseAuthWithGoogle" + account.getId());
-//                firebaseAuthWithGoogle(account.getIdToken());
-//
-//            } catch(ApiException e) {
-//                Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
-//
-//    private void firebaseAuthWithGoogle(String idToken){
-//        if (idToken !=  null) {
-//            // Got an ID token from Google. Use it to authenticate
-//            // with Firebase.
-//            AuthCredential firebaseCredential = GoogleAuthProvider.getCredential(idToken, null);
-//            mAuth.signInWithCredential(firebaseCredential)
-//                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<AuthResult> task) {
-//                            if (task.isSuccessful()) {
-//                                // Sign in success, update UI with the signed-in user's information
-//                                Log.d("TAG", "signInWithCredential:success");
-//                                FirebaseUser user = mAuth.getCurrentUser();
-//
-//                                Intent intent = new Intent(CadastroActivity2.this, MainActivity.class);
-//                                startActivity(intent);
-//
-//                                Toast.makeText(CadastroActivity2.this, "Cadastro com Google", Toast.LENGTH_SHORT).show();
-//                            } else {
-//                                // If sign in fails, display a message to the user.
-//                                Log.w("TAG", "signInWithCredential:failure", task.getException());
-//                            }
-//                        }
-//                    });
-//        }
-//    }
-//
+    private void SignIn() {
+        Intent intent = gsc.getSignInIntent();
+        startActivityForResult(intent,100);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,@Nullable Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+
+        if(requestCode == 100){
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try{
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                Log.d("TAG", "firebaseAuthWithGoogle" + account.getId());
+                firebaseAuthWithGoogle(account.getIdToken());
+
+            } catch(ApiException e) {
+                Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken){
+        if (idToken !=  null) {
+            // Got an ID token from Google. Use it to authenticate
+            // with Firebase.
+            AuthCredential firebaseCredential = GoogleAuthProvider.getCredential(idToken, null);
+            mAuth.signInWithCredential(firebaseCredential)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d("TAG", "signInWithCredential:success");
+                                FirebaseUser user = mAuth.getCurrentUser();
+
+                                Usuario users = new Usuario();
+                                users.setUserId(user.getUid());
+                                users.setUsername(user.getDisplayName());
+                                users.setFotoPerfil(user.getPhotoUrl().toString());
+                                firebaseDatabase.getReference().child("Users").child(user.getUid()).setValue(users);
+                                Intent intent = new Intent(CadastroActivity2.this, MainActivity.class);
+                                startActivity(intent);
+
+                                Toast.makeText(CadastroActivity2.this, "Cadastro com Google", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w("TAG", "signInWithCredential:failure", task.getException());
+                            }
+                        }
+                    });
+        }
+    }
+
 
 }
 
