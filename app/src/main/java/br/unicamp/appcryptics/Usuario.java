@@ -61,7 +61,10 @@ public class Usuario
     }
 
     public String getEmail() {
-        return email;
+        if(email == null)
+            return " ";
+        else
+            return email;
     }
 
     public void setEmail(String email) {

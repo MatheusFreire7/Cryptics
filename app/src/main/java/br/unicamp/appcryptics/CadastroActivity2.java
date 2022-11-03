@@ -54,12 +54,11 @@ public class CadastroActivity2 extends AppCompatActivity{
     GoogleSignInClient gsc;
     private  DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro2);
-        binding =  ActivityCadastro2Binding.inflate(getLayoutInflater());
+        binding = ActivityCadastro2Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -74,17 +73,12 @@ public class CadastroActivity2 extends AppCompatActivity{
             public void onClick(View view) {
                 SignIn();
             }
-
         });
-
 
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-
         getSupportActionBar().hide();
-
-
 
         binding.btnCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +150,6 @@ public class CadastroActivity2 extends AppCompatActivity{
                 }
             }
         });
-
 
 
         binding.txtExisteConta.setOnClickListener(new View.OnClickListener() {
@@ -244,22 +237,19 @@ public class CadastroActivity2 extends AppCompatActivity{
                 firebaseAuthWithGoogle(account.getIdToken());
 
             } catch(ApiException e) {
-                Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Falha no Cadastro da Conta Google", Toast.LENGTH_LONG).show();
             }
         }
     }
 
     private void firebaseAuthWithGoogle(String idToken){
         if (idToken !=  null) {
-            // Got an ID token from Google. Use it to authenticate
-            // with Firebase.
             AuthCredential firebaseCredential = GoogleAuthProvider.getCredential(idToken, null);
             mAuth.signInWithCredential(firebaseCredential)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
                                 Log.d("TAG", "signInWithCredential:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
 
@@ -273,7 +263,6 @@ public class CadastroActivity2 extends AppCompatActivity{
 
                                 Toast.makeText(CadastroActivity2.this, "Cadastro com Google", Toast.LENGTH_SHORT).show();
                             } else {
-                                // If sign in fails, display a message to the user.
                                 Log.w("TAG", "signInWithCredential:failure", task.getException());
                             }
                         }

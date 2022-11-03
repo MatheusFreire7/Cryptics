@@ -103,11 +103,11 @@ public class EntraActivity3 extends AppCompatActivity {
             }
         });
 
-        if(mAuth.getCurrentUser()!=null)
-        {
-            Intent intent = new Intent(EntraActivity3.this,MainActivity.class);
-            startActivity(intent);
-        }
+//        if(mAuth.getCurrentUser()!=null)
+//        {
+//            Intent intent = new Intent(EntraActivity3.this,MainActivity.class);
+//            startActivity(intent);
+//        }
 
         binding.txtEntrar.setOnClickListener(new View.OnClickListener() {
             @Override

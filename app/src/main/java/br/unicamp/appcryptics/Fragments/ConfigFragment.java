@@ -2,30 +2,21 @@ package br.unicamp.appcryptics.Fragments;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.preference.PreferenceManager;
-import android.renderscript.ScriptGroup;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.EmailAuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
@@ -33,12 +24,9 @@ import com.squareup.picasso.Picasso;
 import java.util.HashMap;
 
 import br.unicamp.appcryptics.API.RetrofitClient;
-import br.unicamp.appcryptics.ConfigActivity;
 import br.unicamp.appcryptics.EntraActivity3;
-import br.unicamp.appcryptics.MainActivity;
 import br.unicamp.appcryptics.R;
 import br.unicamp.appcryptics.Usuario;
-import br.unicamp.appcryptics.databinding.ActivityConfigBinding;
 import br.unicamp.appcryptics.databinding.FragmentConfigBinding;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,6 +39,7 @@ public class ConfigFragment extends Fragment {
     FirebaseAuth auth;
     FirebaseDatabase database;
     FirebaseStorage storage;
+    boolean ehPossivelExluir = true;
 
 
     public ConfigFragment() {
@@ -202,60 +191,91 @@ public class ConfigFragment extends Fragment {
                 binding.txtSenha.setText(""); // apaga a senha para funcionar como uma proteção
             }
         });
-
         binding.btnExcluir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(binding.txtEmailAntigo.getText().toString() != " ")
                 {
-                    //String email = binding.txtEmail.getText().toString();
+                    ehPossivelExluir = true;
                     String emailAntigo = binding.txtEmailAntigo.getText().toString(); // chave primária do usuário
-                    //String sobre = binding.txtSobre.getText().toString();
-                    //String username = binding.txtUsername.getText().toString();
-                    //String senha = binding.txtSenha.getText().toString();
-
-
-                    Usuario user = new Usuario(emailAntigo);
-                    Call<Usuario> call = RetrofitClient
-                            .getInstance()
-                            .getAPI()
-                            .excluirUser(emailAntigo);
-
-                    call.enqueue(new Callback<Usuario>() {
+                    database.getReference().child("Users").child(auth.getUid()).addValueEventListener(new ValueEventListener() {
                         @Override
-                        public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                            Usuario loginResponse = response.body();
-                            Gson gson = new GsonBuilder().create();
-                            String jsonRespostaNode = gson.toJson(loginResponse);
-                            if(response.isSuccessful()){
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                                builder.setCancelable(true);
-                                builder.setTitle("Exclusão do Usuário");
-                                builder.setMessage("A exclusão do Usuário Foi realizado com sucesso");
-                                builder.show();
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Usuario users = snapshot.getValue(Usuario.class);
 
-                            }else{
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                                builder.setCancelable(true);
-                                builder.setTitle("Exclusão do Usuário");
-                                builder.setMessage("A exclusão do Usuário não foi realizada");
-                                builder.show();
+                            if (ehPossivelExluir == true) {
+                                if (users.getEmail() != " ") {
+                                     ehPossivelExluir = false;
+                                    if (users.getEmail().equals(emailAntigo)) {
+                                        Usuario user = new Usuario(emailAntigo);
+                                        Call<Usuario> call = RetrofitClient
+                                                .getInstance()
+                                                .getAPI()
+                                                .excluirUser(emailAntigo);
+
+                                        call.enqueue(new Callback<Usuario>() {
+                                            @Override
+                                            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                                                Usuario loginResponse = response.body();
+                                                Gson gson = new GsonBuilder().create();
+                                                String jsonRespostaNode = gson.toJson(loginResponse);
+                                                if (response.isSuccessful()) {
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                                    builder.setCancelable(true);
+                                                    builder.setTitle("Exclusão do Usuário");
+                                                    builder.setMessage("A exclusão do Usuário Foi realizado com sucesso");
+                                                    builder.show();
+
+                                                    database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).setValue(null);
+
+                                                    Intent intent = new Intent(getActivity(),EntraActivity3.class); // mudamos para a activity de login
+                                                    startActivity(intent);
+
+
+                                                } else {
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                                    builder.setCancelable(true);
+                                                    builder.setTitle("Exclusão do Usuário");
+                                                    builder.setMessage("A exclusão do Usuário não foi realizada");
+                                                    builder.show();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<Usuario> call, Throwable t) {
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                                builder.setCancelable(true);
+                                                builder.setTitle("Exclusão do Usuário");
+                                                builder.setMessage(t.getMessage().toString());
+                                                builder.show();
+                                            }
+                                        });
+                                    }
+                                }
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<Usuario> call, Throwable t) {
+                        public void onCancelled(@NonNull DatabaseError error) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                             builder.setCancelable(true);
                             builder.setTitle("Exclusão do Usuário");
-                            builder.setMessage(t.getMessage().toString());
+                            builder.setMessage("A exclusão do Usuário não foi realizada, Digite o seu email Corretamente");
                             builder.show();
                         }
                     });
+                    if(ehPossivelExluir == true)
+                    {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setCancelable(true);
+                        builder.setTitle("Exclusão do Usuário");
+                        builder.setMessage("A exclusão do Usuário não foi realizada, Digite o seu email Corretamente");
+                        builder.show();
+                    }
+
                 }
             }
         });
-
 
         database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {

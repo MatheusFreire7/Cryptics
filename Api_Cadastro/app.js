@@ -97,10 +97,10 @@ app.post('/auth/register', async(req,res) => {
 
 //Alterar Usuario
 app.put('/auth/put/:email', async(req, res) => {
-    const email = req.params.email
+    const emailAtual = req.params.email
 
     //checa se o usuário existe
-    const item = await User.findOne({email: email})
+    const item = await User.findOne({email: emailAtual})
 
     item.email = req.body.email
     item.username = req.body.username
@@ -141,17 +141,16 @@ app.put('/auth/put/:email', async(req, res) => {
     const salt = await bcrypt.genSalt(12)
     const senhaHash = await bcrypt.hash(senhaNova,salt)
 
+    
     //Criar User
     const user = new User({
         usernameNovo,
         emailNovo,
-        senhaNova: senhaHash
+        senhaNova : senhaHash
     })
 
-
  try{
-
-    User.findOneAndUpdate(email, { username: usernameNovo, email: emailNovo, senha: senhaNova },
+    User.findOneAndUpdate({email : emailAtual}, { username: usernameNovo, email: emailNovo, senha: senhaHash },
                             function (err, docs) {
     if (err){
         console.log(err)
@@ -176,11 +175,11 @@ app.put('/auth/put/:email', async(req, res) => {
 
 //deletar Usuario
 app.delete('/auth/delete/:email', async(req, res) => {
-    const email = req.params.email
+    const email2 = req.params.email
 
     try{
 
-        User.findOneAndDelete({email:email},
+        User.findOneAndDelete({email: email2 },
                                 function (err, docs) {
         if (err){
             res.json({msg: "Usuário não encontrado"})
@@ -234,7 +233,7 @@ app.post('/auth/login', async (req,res) => {
       
         const secret = process.env.SECRET
 
-        const token = jwt.sign(
+        const token = jwt.sign( // token da biblioteca jwt
             {
                 id: user._id
             },
@@ -262,7 +261,7 @@ mongoose.connect(`mongodb+srv://${dbUser}:${dbSenha}@cluster0.nskuorg.mongodb.ne
     app.listen(3000)
     console.log("Conectou ao Banco de Dados")
 })
-.catch((err) => console.log(err))
+.catch((err) => console.log(err)) //Printa o erro de conexão com o Banco
 
 
 

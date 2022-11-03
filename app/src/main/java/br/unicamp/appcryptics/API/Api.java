@@ -25,7 +25,7 @@ public interface Api {
     Call<Usuario> alterarUser(@Path("email")String email, @Body Usuario user);
 
     //deletar um usuário
-    @DELETE("/auth/delete/{email}")
+    @DELETE("/auth/delete/{email} ")
     Call<Usuario> excluirUser(@Path("email") String email);
 
 }

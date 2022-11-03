@@ -149,46 +149,50 @@ public class ChatActivity extends AppCompatActivity {
 
         binding.digiteMessagem.setText("");
 
-        if(data.getData()!= null)
+        if(data != null)
         {
-            Uri sFile = data.getData();
-            String menssagem = binding.digiteMessagem.getText().toString();
+            if(data.getData() != null)
+            {
+                Uri sFile = data.getData();
+                String menssagem = binding.digiteMessagem.getText().toString();
 
 
-            final StorageReference reference = storage.getReference().child("image")
-                    .child(FirebaseAuth.getInstance().getUid());
+                final StorageReference reference = storage.getReference().child("image")
+                        .child(FirebaseAuth.getInstance().getUid());
 
-            reference.putFile(sFile).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri)
-                        {  final MessageModel model = new MessageModel(enviaId,menssagem,uri.toString());
-                            model.setImage(uri.toString());
-                            model.setDataMensagem(new Date().getTime());
-                            database.getReference().child("chats")
-                                    .child(senderRoom)
-                                    .push()
-                                    .setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            database.getReference().child("chats")
-                                                    .child(receiverRoom)
-                                                    .push()
-                                                    .setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void unused) {
+                reference.putFile(sFile).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri)
+                            {  final MessageModel model = new MessageModel(enviaId,menssagem,uri.toString());
+                                model.setImage(uri.toString());
+                                model.setDataMensagem(new Date().getTime());
+                                database.getReference().child("chats")
+                                        .child(senderRoom)
+                                        .push()
+                                        .setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                database.getReference().child("chats")
+                                                        .child(receiverRoom)
+                                                        .push()
+                                                        .setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void unused) {
 
-                                                        }
-                                                    });
-                                        }
-                                    });
-                        }
-                         });
+                                                            }
+                                                        });
+                                            }
+                                        });
+                            }
+                        });
 
-                        }
-                    });
+                    }
+                });
+            }
         }
+
     }
 }
